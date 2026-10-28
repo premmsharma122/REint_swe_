@@ -12,8 +12,8 @@ It shows (1) the latest wind-generation forecast available when a purchase decis
 | **Data** | Elexon BMRS only: `WINDFOR` (forecasts) and `FUELHH` (actuals, `fuelType = WIND`) |
 | **Scope** | GB national wind generation · purchase decisions for **January 2026** |
 
-> **AI usage disclosure:** this project was built with the help of an AI assistant (Claude by Anthropic) for
-> scaffolding, code and documentation. The design decisions were reviewed, and the app was run and tested, by the author.
+> **AI usage disclosure:** this project was built with the help of AI tools, mainly Claude (Anthropic).
+> See [AI and tools used](#11-ai-and-tools-used) for exactly what was AI-assisted and what the author did.
 
 ---
 
@@ -169,3 +169,38 @@ Every push to the main branch redeploys automatically, and pull requests get a p
 - The uncertainty band is an empirical quantile band, not conditional on wind level (errors are larger at high output).
 - The cut-off hour is an assumption standing in for the real auction gate time.
 - Next: per-wind-regime error bands, CI (pytest + build), an end-to-end smoke test, and caching headers on the API.
+
+## 11. AI and tools used
+
+### Claude (Anthropic): main AI assistant
+
+Claude was used as a pair-programming assistant throughout the build. It helped with:
+
+| Area | How Claude helped |
+|---|---|
+| Understanding the brief | Read the problem statement and turned it into a plan: the two buyer questions, the data to use, and the app features |
+| Architecture | Proposed the split into a pure analysis layer, a thin FastAPI API, and a single-page React UI |
+| Backend | Wrote the Elexon client, data store, pandas analysis (forecast selection, metrics, day-ahead view) and API routes |
+| Frontend | Wrote the React dashboard (controls, KPI cards, Recharts charts) |
+| Tests | Wrote unit tests for the analysis logic and ran them on synthetic data |
+| DevOps | Drafted the Dockerfile, `docker-compose.yml`, `vercel.json` and the Vercel serverless entry point |
+| Debugging | Helped diagnose setup problems (Python virtual environment, GitHub authentication, Vercel project preset) |
+| Documentation | Drafted this README and the pull request description |
+
+### Other tools
+
+| Tool | Used for |
+|---|---|
+| Elexon BMRS API documentation (Swagger UI) | Research on the data: exploring the `WINDFOR` and `FUELHH` stream endpoints, their parameters, response fields and the settlement-date vs publish-time restriction |
+| Visual Studio Code | Editor and integrated terminal for running and debugging the backend and frontend locally |
+| GitHub | Source control, public repository and pull request |
+| Vercel | Hosting and deployment of the live app |
+
+### What the author did
+
+- Did the domain research on the UK day-ahead market and on how to measure forecast error, to understand what the buyer needs.
+- Ran the app locally, fetched the real January 2026 data from Elexon, and checked it through `/api/health`.
+- Reviewed the modelling assumptions in section 4 and the code, and ran the tests on their own machine.
+- Created the GitHub repository, deployed the app to Vercel, and verified the live app.
+
+AI-generated code and text were reviewed by the author before submission.
